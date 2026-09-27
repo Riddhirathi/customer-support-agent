@@ -1,0 +1,8 @@
+[server]
+# Disabled: with sentence-transformers/transformers installed, Streamlit's
+# hot-reload file watcher walks unused vision-model submodules (YOLOS,
+# ZoeDepth) that try to import torchvision, which isn't installed since
+# this project only uses text embeddings. Harmless but noisy — silenced
+# here. Trade-off: edits to .py files won't auto-reload; re-run
+# `streamlit run app.py` manually after changes.
+fileWatcherType = "none"
