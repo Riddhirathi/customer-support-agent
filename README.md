@@ -126,19 +126,3 @@ generic intro paragraph out-ranking the actual answer section. The eval also sur
 using up its output budget on internal reasoning before ever emitting JSON, rather than chase an
 Ollama-version-specific workaround further, I leaned on the fail-closed design already in place:
 it treats that as any other provider failure and escalates instead of crashing or guessing.
-
-```mermaid
-flowchart TD
-    A[Customer question] --> B{Guard: length,<br/>PII mask, injection,<br/>sensitive-intent check}
-    B -->|invalid input| Z[Escalate]
-    B -->|valid| C[Retrieve top-3 sections<br/>BM25 + embeddings]
-    C -->|nothing retrieved| Z
-    C --> D[LLM: answer only from sections,<br/>cite section + evidence quote,<br/>return JSON]
-    D -->|LLM / JSON error| Z
-    D --> E[Verify: citation real?<br/>quote matches? numbers grounded?]
-    E --> F{Confidence from checks<br/>+ retrieval score}
-    F -->|high/medium,<br/>no sensitive/injection flag| G[Respond]
-    F -->|low, or sensitive/injection flagged| Z
-    G --> H[(AgentResult + trace log)]
-    Z --> H
-```
