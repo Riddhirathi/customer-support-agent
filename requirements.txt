@@ -1,0 +1,10 @@
+openai
+pydantic
+pyyaml
+python-dotenv
+rank_bm25
+sentence-transformers
+numpy
+rapidfuzz
+streamlit
+pytest

@@ -1,0 +1,22 @@
+[
+  {
+    "question": "What is the foreclosure charge on a floating-rate personal loan after the lock-in period ends?",
+    "note": "clearly answerable — prepayment_foreclosure.md, foreclosure-charges section"
+  },
+  {
+    "question": "What charges apply if my EMI auto-debit bounces?",
+    "note": "clearly answerable — emi_payments.md, bounce-charges section"
+  },
+  {
+    "question": "How do I update a registered address and what documents are accepted?",
+    "note": "clearly answerable — kyc_account_updates.md, address-change section"
+  },
+  {
+    "question": "My foreclosure payoff amount doesn't match what I calculated from the published charges — why is it different?",
+    "note": "partly answerable — general charges are documented but the specific discrepancy needs account-level lookup"
+  },
+  {
+    "question": "Can you check why my loan application was rejected?",
+    "note": "account-specific, sensitive intent — must escalate, not covered by policy docs"
+  }
+]

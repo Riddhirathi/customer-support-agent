@@ -1,0 +1,38 @@
+# All tunable thresholds and knobs live here — never hardcode these in src/.
+
+retrieval:
+  top_k: 3
+  bm25_weight: 0.5
+  embedding_weight: 0.5
+  embedding_model: "BAAI/bge-small-en-v1.5"
+
+guard:
+  max_question_length: 500
+  injection_phrases:
+    - "ignore previous"
+    - "ignore all previous"
+    - "disregard previous"
+    - "system prompt"
+    - "you are now"
+    - "act as"
+    - "new instructions"
+    - "forget your instructions"
+  sensitive_intent_phrases:
+    - "my loan"
+    - "my account"
+    - "rejected"
+    - "fraud"
+    - "complaint"
+    - "legal notice"
+    - "refund status"
+
+llm:
+  max_answer_words: 80
+  request_timeout_seconds: 200
+  max_json_retries: 1
+  context_window_tokens: 8192
+
+verify:
+  citation_fuzzy_match_threshold: 70
+  confidence_high_score_threshold: 0.65
+  confidence_low_score_threshold: 0.35
