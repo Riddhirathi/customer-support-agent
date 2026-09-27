@@ -12,7 +12,7 @@ answer in a cited section, and escalates to a human when it isn't confident.
 | Retrieval        | BM25 (`rank_bm25`) + local sentence embeddings (`BAAI/bge-small-en-v1.5` via `sentence-transformers`) |
 | Validation       | Pydantic (LLM output, final result, and trace-log schemas)                                                  |
 | Grounding checks | `rapidfuzz` (citation fuzzy-match) + regex (number extraction)                                            |
-| UI               | Streamlit                                                                                                  |
+| UI               | Streamlit                                                                                                   |
 | Testing          | `pytest` (47 unit tests, fake LLM client, no API key needed) + a custom eval harness (15 cases)           |
 
 **Design philosophy:** optimized for *never confidently wrong* over *always answering* — every
@@ -51,22 +51,6 @@ verbatim evidence, returned as JSON. A verification step confirms the citation i
 matches the section text, and every number in the answer appears in that section. Confidence comes
 only from these checks plus the retrieval score, never the LLM's self-rating, and low confidence,
 an unanswerable question, or a sensitive/injection flag all force `action: escalate`.
-
-```mermaid
-flowchart TD
-    A[Customer question] --> B{Guard: length,<br/>PII mask, injection,<br/>sensitive-intent check}
-    B -->|invalid input| Z[Escalate]
-    B -->|valid| C[Retrieve top-3 sections<br/>BM25 + embeddings]
-    C -->|nothing retrieved| Z
-    C --> D[LLM: answer only from sections,<br/>cite section + evidence quote,<br/>return JSON]
-    D -->|LLM / JSON error| Z
-    D --> E[Verify: citation real?<br/>quote matches? numbers grounded?]
-    E --> F{Confidence from checks<br/>+ retrieval score}
-    F -->|high/medium,<br/>no sensitive/injection flag| G[Respond]
-    F -->|low, or sensitive/injection flagged| Z
-    G --> H[(AgentResult + trace log)]
-    Z --> H
-```
 
 ## Why did I choose this model/framework/approach?
 
@@ -142,3 +126,19 @@ generic intro paragraph out-ranking the actual answer section. The eval also sur
 using up its output budget on internal reasoning before ever emitting JSON, rather than chase an
 Ollama-version-specific workaround further, I leaned on the fail-closed design already in place:
 it treats that as any other provider failure and escalates instead of crashing or guessing.
+
+```mermaid
+flowchart TD
+    A[Customer question] --> B{Guard: length,<br/>PII mask, injection,<br/>sensitive-intent check}
+    B -->|invalid input| Z[Escalate]
+    B -->|valid| C[Retrieve top-3 sections<br/>BM25 + embeddings]
+    C -->|nothing retrieved| Z
+    C --> D[LLM: answer only from sections,<br/>cite section + evidence quote,<br/>return JSON]
+    D -->|LLM / JSON error| Z
+    D --> E[Verify: citation real?<br/>quote matches? numbers grounded?]
+    E --> F{Confidence from checks<br/>+ retrieval score}
+    F -->|high/medium,<br/>no sensitive/injection flag| G[Respond]
+    F -->|low, or sensitive/injection flagged| Z
+    G --> H[(AgentResult + trace log)]
+    Z --> H
+```
