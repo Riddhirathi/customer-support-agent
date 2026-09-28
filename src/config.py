@@ -22,6 +22,7 @@ class RetrievalConfig(BaseModel):
     bm25_weight: float
     embedding_weight: float
     embedding_model: str
+    pdf_strategy: str
 
 
 class GuardConfig(BaseModel):

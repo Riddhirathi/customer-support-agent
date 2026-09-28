@@ -10,8 +10,8 @@ Ran 15 cases from `eval/cases.jsonl` against the live pipeline.
 | Category accuracy | 100% |
 | Groundedness rate (of responded cases) | 100% (8 responded) |
 | JSON retry rate | 0% |
-| Latency p50 | 1390 ms |
-| Latency p95 | 4032 ms |
+| Latency p50 | 1049 ms |
+| Latency p95 | 3280 ms |
 
 ## Failed cases (routing mismatch)
 

@@ -8,3 +8,7 @@ numpy
 rapidfuzz
 streamlit
 pytest
+unstructured[pdf]
+# partition_pdf imports unstructured-inference even for strategy="fast", but the [pdf] extra
+# leaves it out on Windows + Python 3.13, so it is listed explicitly.
+unstructured-inference

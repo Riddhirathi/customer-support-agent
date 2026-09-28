@@ -5,6 +5,10 @@ retrieval:
   bm25_weight: 0.5
   embedding_weight: 0.5
   embedding_model: "BAAI/bge-small-en-v1.5"
+  # How `unstructured` reads the policy PDFs. "fast" extracts the PDF's text layer directly
+  # (no OCR, no system installs). Scanned/image-only PDFs need "ocr_only" or "hi_res", which
+  # require Tesseract installed on the machine.
+  pdf_strategy: "fast"
 
 guard:
   max_question_length: 500
