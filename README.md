@@ -5,16 +5,16 @@ answer in a cited section, and escalates to a human when it isn't confident.
 
 ## Tech stack
 
-| Layer            | Choice                                                                                                           |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Language         | Python 3.13                                                                                                      |
-| LLM              | Groq (`openai/gpt-oss-120b`, OpenAI-compatible API) — local Ollama (`qwen3.5:9b`) as a fallback                  |
+| Layer            | Choice                                                                                                                  |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Language         | Python 3.13                                                                                                             |
+| LLM              | Groq (`openai/gpt-oss-120b`, OpenAI-compatible API) — local Ollama (`qwen3.5:9b`) as a fallback                    |
 | Document parsing | `unstructured` (`partition_pdf`, `fast` strategy): policy PDFs → typed elements (Title, NarrativeText, ListItem) |
-| Retrieval        | BM25 (`rank_bm25`) + local sentence embeddings (`BAAI/bge-small-en-v1.5` via `sentence-transformers`)            |
-| Validation       | Pydantic (LLM output, final result, and trace-log schemas)                                                       |
-| Grounding checks | `rapidfuzz` (citation fuzzy-match) + regex (number extraction)                                                   |
-| UI               | Streamlit                                                                                                        |
-| Testing          | `pytest` (65 unit tests, fake LLM client, no API key needed) + a custom eval harness (15 cases)                  |
+| Retrieval        | BM25 (`rank_bm25`) + local sentence embeddings (`BAAI/bge-small-en-v1.5` via `sentence-transformers`)             |
+| Validation       | Pydantic (LLM output, final result, and trace-log schemas)                                                              |
+| Grounding checks | `rapidfuzz` (citation fuzzy-match) + regex (number extraction)                                                        |
+| UI               | Streamlit                                                                                                               |
+| Testing          | `pytest` (65 unit tests, fake LLM client, no API key needed) + a custom eval harness (15 cases)                       |
 
 **Design philosophy:** optimized for *never confidently wrong* over *always answering* — every
 escalate is a deliberate decision, not a fallback for what the code couldn't handle. Confidence is
@@ -40,8 +40,7 @@ pytest -q                       # 65 unit tests, no API key needed (fake LLM cli
 python -m eval.run              # 15-case eval, writes eval/results.md
 ```
 
-`data/policies/` holds 3 sample policy PDFs. Drop in more PDFs and the filename becomes the category;
-no code changes. PDFs need a text layer (scanned/image-only PDFs are rejected with a clear error).
+`data/policies/` holds 3 sample policy PDFs. PDFs need a text layer (scanned/image-only PDFs are rejected with a clear error).
 Start-up takes ~10-20s: it loads `unstructured`, parses the PDFs, and loads the embedding model.
 
 ## How does this solution work?
@@ -125,7 +124,7 @@ interest figure isn't just a bad answer, it's a mis-selling and compliance risk 
 not a vendor's problem. `verify.py` checks every number in an answer against the cited policy text
 and escalates instead of responding if it doesn't match, the system can be wrong by saying
 "I don't know," but not by inventing a number. The same rule covers tooling: `unstructured` sends
-usage telemetry by default, so it is opted out in `retriever.py` (checked: zero outbound calls while parsing).
+usage telemetry by default, so it is opted out in `retriever.py` .
 
 ## What AI coding tools I used, and how did I use them?
 
